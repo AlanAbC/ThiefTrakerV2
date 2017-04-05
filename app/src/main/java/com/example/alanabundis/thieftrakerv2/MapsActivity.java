@@ -220,18 +220,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                     objetoSucesos[] arrayMarcadores = gson.fromJson(jArrayMarcadores.toString(), objetoSucesos[].class);
                                                     for(int i = 0; i < arrayMarcadores.length; i++){
                                                         agregarMarcador(arrayMarcadores[i]);
-                                                    }
+                                                    }/*
                                                     if(flag > 2)
                                                     {
                                                         NotificationManager nManager = (NotificationManager) getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
                                                         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                                                                 getBaseContext())
-                                                                //.setSmallIcon(R.drawable.ic_notificacion)
+                                                                .setSmallIcon(R.drawable.ic_notificacion)
                                                                 .setContentTitle("Alerta!")
                                                                 .setContentText("Estas en una zona Peligrosa")
                                                                 .setWhen(System.currentTimeMillis());
                                                         nManager.notify(12345, builder.build());
-                                                    }
+
+                                                    }*/
                                                     flag = 0;
                                                     break;
                                                 case "0":
