@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.alanabundis.thieftrakerv2.acerca"
+    android:background="#F3F3F3">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/banner"
+        android:background="#0092F6">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:layout_marginRight="90dp"
+            android:src="@drawable/thieftrakert"
+            android:id="@+id/imageView" />
+
+        <ImageButton
+            android:id="@+id/acercade"
+            android:layout_width="40dp"
+            android:padding="12dp"
+            android:layout_height="45dp"
+            android:background="#0093F5"
+            android:layout_marginRight="2dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/acerca"
+            android:layout_marginEnd="11dp"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:src="@drawable/info"
+        android:id="@+id/info"
+        android:layout_below="@id/banner"
+        android:background="#F3F3F3"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@id/info"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/paypal"
+        android:background="#F3F3F3"/>
+</RelativeLayout>
