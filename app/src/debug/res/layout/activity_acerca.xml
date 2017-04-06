@@ -51,5 +51,6 @@
         android:layout_below="@id/info"
         android:layout_marginTop="15dp"
         android:src="@drawable/paypal"
+        android:id="@+id/paypal"
         android:background="#F3F3F3"/>
 </RelativeLayout>
