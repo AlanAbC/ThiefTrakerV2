@@ -43,7 +43,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="17dp"
         android:layout_below="@id/banner"
         android:layout_marginTop="15dp"
         android:id="@+id/ubicacionT"
@@ -122,7 +122,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_below="@id/tipo"
                 android:id="@+id/fechaT"
-                android:textSize="20dp"/>
+                android:textSize="17dp"/>
 
             <DatePicker
                 android:datePickerMode="spinner"
@@ -145,7 +145,7 @@
                 android:id="@+id/horaT"
                 android:paddingLeft="15dp"
                 android:layout_below="@id/fecha"
-                android:textSize="20dp"/>
+                android:textSize="17dp"/>
             <TimePicker
                 android:timePickerMode="spinner"
                 android:layout_width="match_parent"
