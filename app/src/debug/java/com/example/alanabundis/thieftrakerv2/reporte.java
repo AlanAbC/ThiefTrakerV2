@@ -44,10 +44,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
+
+import static android.support.v7.widget.AppCompatDrawableManager.get;
 
 public class reporte extends Activity implements OnMapReadyCallback {
 
@@ -112,10 +121,16 @@ public class reporte extends Activity implements OnMapReadyCallback {
         enviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(lat == 0 && lon == 0){
-                    Toast.makeText(getApplicationContext(),"Error\nFaltan seleccionar un punto en el mapa",Toast.LENGTH_LONG).show();
+                String f = fecha.getYear() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getDayOfMonth()+ " " + hora.getCurrentHour() + ":" + hora.getCurrentMinute();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                Date fe = sdf.parse(f, new ParsePosition(0));
+                Date feAc = new Date();
+                if(feAc.before(fe)){
+                    Toast.makeText(getApplicationContext(),"Error\nNo se puede usar una fecha mayor a la actual",Toast.LENGTH_LONG).show();
                 }else if(tipoPos == 0){
                     Toast.makeText(getApplicationContext(),"Error\nFaltan seleccionar un tipo de insidencia",Toast.LENGTH_LONG).show();
+                }else if(lat == 0 && lon == 0){
+                    Toast.makeText(getApplicationContext(),"Error\nFaltan seleccionar un punto en el mapa",Toast.LENGTH_LONG).show();
                 }else{
                     registrarSuceso();
                     Intent i = new Intent(getApplicationContext(), MapsActivity.class);
