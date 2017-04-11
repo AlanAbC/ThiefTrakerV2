@@ -173,6 +173,7 @@ public class ServicioThief extends Service
                                 Log.d(TAG, "getLastLocation: " + mLastLocation.toString());
                                 latitud = mLastLocation.getLatitude();
                                 longitud = mLastLocation.getLongitude();
+                                //A alan le gusta la musica de banda :v
                             }
                         }
                     }
