@@ -34,7 +34,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
+        
+        <service android:name=".ServicioThief" />
+        
         <activity
             android:name=".MapsActivity"
             android:screenOrientation="portrait"

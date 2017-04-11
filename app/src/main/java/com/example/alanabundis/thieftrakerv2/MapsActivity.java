@@ -66,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        startService(new Intent(MapsActivity.this, ServicioThief.class));
         direccion = (EditText) findViewById(R.id.txtDireccion);
         reporte = (ImageButton) findViewById(R.id.btnRegistro);
         acerca = (ImageButton) findViewById(R.id.acercade);
@@ -162,8 +163,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             CameraUpdate camara = CameraUpdateFactory.newLatLngZoom(coordenadas, 15);
                             mMap.animateCamera(camara);
                             actualizarMarcadores();
-                        }else{
-
                         }
                     }
                 }
