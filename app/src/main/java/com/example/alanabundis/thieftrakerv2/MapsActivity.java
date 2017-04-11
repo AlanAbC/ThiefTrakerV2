@@ -2,12 +2,19 @@ package com.example.alanabundis.thieftrakerv2;
 
 import android.Manifest;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -41,6 +48,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -55,8 +63,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int flag2 = 0;
     private String d;
     private static final int myPermiso = 1;
-    private static final String LOGTAG = "android-localizacion";
+    private static final String LOGTAG = "ALM-TT";
     private List<Address> address;
+
+    //Comunicacion con el Servicio
+    Messenger mService = null;
+    boolean mIsBound;
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case ServicioThief.MSG_UBICACION_VALUE:
+                    String str1 = msg.getData().getString("str1");
+                    StringTokenizer st = new StringTokenizer(str1, "+");
+                    String lati = st.nextToken();
+                    String longi = st.nextToken();
+                    lat = Double.parseDouble(lati);
+                    lon = Double.parseDouble(longi);
+                    actualizarMapa();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mService = new Messenger(service);
+            try {
+                Message msg = Message.obtain(null, ServicioThief.MSG_REGISTER_CLIENT);
+                msg.replyTo = mMessenger;
+                mService.send(msg);
+            }
+            catch (RemoteException e) {
+                // In this case the service has crashed before we could even do anything with it
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
+            mService = null;
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +173,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, myPermiso);
             }
         }
+
+        CheckIfServiceIsRunning();
+        doBindService();
+    }
+
+    private void CheckIfServiceIsRunning() {
+        //If the service is running when the activity starts, we want to automatically bind to it.
+        if (ServicioThief.isRunning()) {
+            doBindService();
+            Toast.makeText(this, "Vinculado con el Servicio", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    void doBindService() {
+        if(!mIsBound)
+        {
+            bindService(new Intent(this, ServicioThief.class), mConnection, Context.BIND_AUTO_CREATE);
+            mIsBound = true;
+            Toast.makeText(this, "Conectado", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void actualizarMapa()
+    {
+        if(flag2 == 0){
+            LatLng coordenadas = new LatLng(lat, lon);
+            CameraUpdate camara = CameraUpdateFactory.newLatLngZoom(coordenadas, 15);
+            mMap.animateCamera(camara);
+            actualizarMarcadores();
+            flag2 ++;
+        }else {
+            if (lat > lat + 0.00058 && lat < lat - 0.00058 && lon > lon + 0.00058 && lon < lon - 0.00058) {
+                LatLng coordenadas = new LatLng(lat, lon);
+                CameraUpdate camara = CameraUpdateFactory.newLatLngZoom(coordenadas, 15);
+                mMap.animateCamera(camara);
+                actualizarMarcadores();
+            }
+        }
     }
 
     /**
@@ -139,12 +229,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         lat = 20.5917044;
         lon = -100.3880343;
-        //LatLng posUsu = new LatLng(lat, lon);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(posUsu));
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+        LatLng posUsu = new LatLng(lat, lon);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(posUsu));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
-            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            /*mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
                     if(flag2 == 0){
@@ -166,7 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 }
-            });
+            });*/
         }
 
     }
