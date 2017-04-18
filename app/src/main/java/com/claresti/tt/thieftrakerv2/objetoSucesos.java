@@ -1,4 +1,4 @@
-package com.example.alanabundis.thieftrakerv2;
+package com.claresti.tt.thieftrakerv2;
 
 /**
  * Created by Rikym on 05/04/2017.

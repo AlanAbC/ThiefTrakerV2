@@ -1,4 +1,4 @@
-package com.example.alanabundis.thieftrakerv2;
+package com.claresti.tt.thieftrakerv2;
 
 
 import android.Manifest;
@@ -9,15 +9,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -28,9 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -236,7 +230,7 @@ public class ServicioThief extends Service
                                                         NotificationManager nManager = (NotificationManager) getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
                                                         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                                                                 getBaseContext())
-                                                                .setSmallIcon(R.drawable.ic_notification)
+                                                                .setSmallIcon(R.drawable.icono_not_pre)
                                                                 .setContentTitle("Alerta!")
                                                                 .setContentText("Estas en una zona Peligrosa")
                                                                 .setWhen(System.currentTimeMillis());

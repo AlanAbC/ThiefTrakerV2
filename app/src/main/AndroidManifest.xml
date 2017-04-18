@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.alanabundis.thieftrakerv2">
+    package="com.claresti.tt.thieftrakerv2">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -35,10 +35,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         
-        <service android:name=".ServicioThief" />
+        <service android:name="com.claresti.tt.thieftrakerv2.ServicioThief" />
         
         <activity
-            android:name=".MapsActivity"
+            android:name="com.claresti.tt.thieftrakerv2.MapsActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_maps">
             <intent-filter>
@@ -48,10 +48,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".reporte"
+            android:name="com.claresti.tt.thieftrakerv2.reporte"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".acerca"
+            android:name="com.claresti.tt.thieftrakerv2.acerca"
             android:screenOrientation="portrait"/>
     </application>
 

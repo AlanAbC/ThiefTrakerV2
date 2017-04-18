@@ -1,4 +1,4 @@
-package com.example.alanabundis.thieftrakerv2;
+package com.claresti.tt.thieftrakerv2;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,7 +13,7 @@ public class acerca extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_acerca);
+        setContentView(R.layout.activity_acercade);
         ImageView paypal = (ImageView)findViewById(R.id.paypal);
         paypal.setOnClickListener(new View.OnClickListener() {
             @Override

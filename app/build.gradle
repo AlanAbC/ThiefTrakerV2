@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.alanabundis.thieftrakerv2"
+        applicationId "com.claresti.tt.thieftrakerv2"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 1

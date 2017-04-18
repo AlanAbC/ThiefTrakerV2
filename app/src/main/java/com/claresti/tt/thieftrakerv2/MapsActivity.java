@@ -1,4 +1,4 @@
-package com.example.alanabundis.thieftrakerv2;
+package com.claresti.tt.thieftrakerv2;
 
 import android.Manifest;
 import android.app.AlertDialog;
