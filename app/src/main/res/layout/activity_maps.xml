@@ -3,7 +3,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.claresti.tt.thieftrakerv2.MapsActivity"
+    tools:context="com.claresti.tt.thieftraker.MapsActivity"
     android:padding="0dp"
     android:background="#0093F5"
     >

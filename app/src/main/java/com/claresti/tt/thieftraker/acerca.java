@@ -1,4 +1,4 @@
-package com.claresti.tt.thieftrakerv2;
+package com.claresti.tt.thieftraker;
 
 import android.content.Intent;
 import android.net.Uri;

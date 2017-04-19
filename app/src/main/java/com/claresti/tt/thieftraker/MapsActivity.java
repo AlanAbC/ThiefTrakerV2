@@ -1,4 +1,4 @@
-package com.claresti.tt.thieftrakerv2;
+package com.claresti.tt.thieftraker;
 
 import android.Manifest;
 import android.app.AlertDialog;

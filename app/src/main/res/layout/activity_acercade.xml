@@ -4,7 +4,7 @@
     android:id="@+id/activity_acercade"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.claresti.tt.thieftrakerv2.acerca"
+    tools:context="com.claresti.tt.thieftraker.acerca"
     android:background="#F3F3F3">
 
     <RelativeLayout

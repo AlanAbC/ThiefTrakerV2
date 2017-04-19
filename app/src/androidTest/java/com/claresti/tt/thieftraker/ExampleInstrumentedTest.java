@@ -1,4 +1,4 @@
-package com.claresti.tt.thieftrakerv2;
+package com.claresti.tt.thieftraker;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

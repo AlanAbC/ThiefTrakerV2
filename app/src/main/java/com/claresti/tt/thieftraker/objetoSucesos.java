@@ -1,4 +1,4 @@
-package com.claresti.tt.thieftrakerv2;
+package com.claresti.tt.thieftraker;
 
 /**
  * Created by Rikym on 05/04/2017.
