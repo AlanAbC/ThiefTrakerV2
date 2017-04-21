@@ -36,7 +36,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyBln9-qUJo-IE-3PreC6rVVfx9vaFaj-AY" />
 
         <service android:name="com.claresti.tt.thieftraker.ServicioThief" />
         
