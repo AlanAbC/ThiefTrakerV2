@@ -39,9 +39,10 @@
     </RelativeLayout>
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="300dp"
         android:src="@drawable/info"
         android:id="@+id/info"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/banner"
         android:background="#F3F3F3"/>
 
