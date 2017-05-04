@@ -27,7 +27,7 @@ public class TTSingletonUbicacion implements GoogleApiClient.ConnectionCallbacks
     private static  TTSingletonUbicacion instancia = null;
     private Context context;
 
-    private double latitud = 0, longitud = 0;
+    public static double latitud = 0, longitud = 0;
 
     private static final String LOGTAG = "SU-TT";
 
@@ -51,6 +51,11 @@ public class TTSingletonUbicacion implements GoogleApiClient.ConnectionCallbacks
             instancia = new TTSingletonUbicacion(context);
         }
 
+        return instancia;
+    }
+
+    public static TTSingletonUbicacion obtenerInstancia()
+    {
         return instancia;
     }
 

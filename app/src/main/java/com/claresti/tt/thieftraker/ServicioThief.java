@@ -60,18 +60,13 @@ public class ServicioThief extends Service
 
     public int cantidadIncidentes = 0;
 
+    private TTSingletonUbicacion singletonUbicacion;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
-            //Extraemos la ubicacion
-            LocationManager myLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            MyLocationListener myll = new MyLocationListener();
-            myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) myll);
-        }
+        singletonUbicacion = TTSingletonUbicacion.obtenerInstancia();
         isRunning = true;
-
     }
 
     @Override
@@ -97,34 +92,6 @@ public class ServicioThief extends Service
         return mMessenger.getBinder();
     }
 
-    //Clase que servira de Listener para la Ubicacion
-    private class MyLocationListener implements LocationListener
-    {
-        @Override
-        public void onLocationChanged(Location location) {
-            //Toast.makeText(ServicioThief.this, "Ubicacion Nueva", Toast.LENGTH_SHORT).show();
-            //Cada que la ubicacion cambie renovamos latitud y longitud
-            latitud = location.getLatitude();
-            longitud = location.getLongitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider)
-        {
-            Log.e(TAG, "GPS Activo");
-        }
-
-        @Override
-        public void onProviderDisabled(String provider)
-        {
-            Log.e(TAG, "GPS Desactivado");
-        }
-    }
 
     class IncomingHandler extends Handler {
         // Clase que maneja la comunicacion con el servicio
@@ -168,11 +135,6 @@ public class ServicioThief extends Service
         }
     }
 
-    public static boolean isRunning()
-    {
-        return isRunning;
-    }
-
     private class AsyncTask extends android.os.AsyncTask
     {
         @Override
@@ -181,7 +143,7 @@ public class ServicioThief extends Service
             {
                 while(tiempoTranscurrido < tiempoTotal)
                 {
-                    sendUbicacionaIU(latitud, longitud);
+                    sendUbicacionaIU(singletonUbicacion.latitud , singletonUbicacion.longitud);
                     calcularIncidentesCercanos(latitud, longitud);
                     Thread.sleep(5000);
                     Log.e(TAG, "" + tiempoTranscurrido);

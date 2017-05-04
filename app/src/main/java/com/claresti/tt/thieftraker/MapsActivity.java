@@ -95,6 +95,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String longi = st.nextToken();
                     lat = Double.parseDouble(lati);
                     lon = Double.parseDouble(longi);
+
+                    actualizarMapa();
                     break;
                 default:
                     super.handleMessage(msg);
