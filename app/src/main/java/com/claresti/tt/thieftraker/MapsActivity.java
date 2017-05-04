@@ -59,14 +59,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static final int REQUEST_LOCATION = 1;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private LocationSettingsRequest mLocationSettingsRequest;
-    private Location mLastLocation;
     AlertDialog alert = null;
     LocationManager locationManager;
 
@@ -89,34 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     boolean mIsBound;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        processLastLocation();
-        // Iniciamos las actualizaciones de ubicación
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d(LOGTAG, "Conexión suspendida");
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(
-                this,
-                "Error de conexión con el código:" + connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG)
-                .show();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        updateLocationUI();
-    }
-
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -128,11 +95,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String longi = st.nextToken();
                     lat = Double.parseDouble(lati);
                     lon = Double.parseDouble(longi);
-                    if(lat != 0.0 && lon != 0.0)
-                    {
-                        mGoogleApiClient.disconnect();
-                        actualizarMapa();
-                    }
                     break;
                 default:
                     super.handleMessage(msg);
@@ -169,14 +131,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Establecer punto de entrada para la API de ubicación
-        buildGoogleApiClient();
-
-        // Crear configuración de peticiones
-        createLocationRequest();
-
-        // Crear opciones de peticiones
-        buildLocationSettingsRequest();
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -295,7 +249,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (grantResults.length == 1
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                startLocationUpdates();
+                if (!isLocationPermissionGranted()) {
+                    manageDeniedPermission();
+                }
 
             } else {
                 Log.e(LOGTAG, "Permisos no otorgados");
@@ -406,30 +362,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .addApi(ActivityRecognition.API)
-                .enableAutoManage(this, this)
-                .build();
-    }
-
-    private void createLocationRequest() {
-        mLocationRequest = new LocationRequest()
-                .setInterval(1000)
-                .setFastestInterval(500)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    private void buildLocationSettingsRequest() {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest)
-                .setAlwaysShow(true);
-        mLocationSettingsRequest = builder.build();
-    }
-
     private void checkLocationSettings() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("El sistema GPS esta desactivado, ¿Desea activarlo?")
@@ -446,14 +378,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
         alert = builder.create();
         alert.show();
-    }
-
-    private void startLocationUpdates() {
-        if (isLocationPermissionGranted()) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, MapsActivity.this);
-        } else {
-            manageDeniedPermission();
-        }
     }
 
     private boolean isLocationPermissionGranted() {
@@ -473,27 +397,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION);
         }
-    }
-
-    private void processLastLocation() {
-        getLastLocation();
-        if (mLastLocation != null) {
-            updateLocationUI();
-        }
-    }
-
-    private void getLastLocation() {
-        if (isLocationPermissionGranted()) {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        } else {
-            manageDeniedPermission();
-        }
-    }
-
-    private void updateLocationUI() {
-        lat = mLastLocation.getLatitude();
-        lon = mLastLocation.getLongitude();
-        actualizarMapa();
     }
 
     private void sendMessageToService(int intvaluetosend) {
