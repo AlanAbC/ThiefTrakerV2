@@ -172,7 +172,7 @@ public class ServicioThief extends Service
                 addToRequestQueue(
                         request = new JsonObjectRequest(
                                 Request.Method.GET,
-                                "http://http://tt.claresti.com/contar_cercanos.php?lat=" + Double.toString(latitud) + "&lon=" + Double.toString(longitud),
+                                "http://tt.claresti.com/contar_cercanos.php?lat=" + Double.toString(latitud) + "&lon=" + Double.toString(longitud),
                                 null,
                                 new Response.Listener<JSONObject>(){
                                     @Override

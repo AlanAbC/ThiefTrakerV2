@@ -192,7 +192,7 @@ public class reporte extends Activity implements OnMapReadyCallback {
     private void registrarSuceso(){
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
-                "http://nmrapp.hol.es/insertar_registro.php",
+                "http://tt.claresti.com/insertar_registro.php",
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response){
