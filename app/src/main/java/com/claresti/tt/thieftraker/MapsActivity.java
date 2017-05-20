@@ -95,8 +95,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String longi = st.nextToken();
                     lat = Double.parseDouble(lati);
                     lon = Double.parseDouble(longi);
-
-                    actualizarMapa();
+                    if(lat != 0 && lon != 0)
+                    {
+                        actualizarMapa();
+                    }
                     break;
                 default:
                     super.handleMessage(msg);
@@ -271,7 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 addToRequestQueue(
                         request = new JsonObjectRequest(
                                 Request.Method.GET,
-                                "http://http://tt.claresti.com/puntosCercanos.php?lat=" + Double.toString(lat) + "&lon=" + Double.toString(lon),
+                                "http://tt.claresti.com/puntosCercanos.php?lat=" + Double.toString(lat) + "&lon=" + Double.toString(lon),
                                 null,
                                 new Response.Listener<JSONObject>(){
                                     @Override
