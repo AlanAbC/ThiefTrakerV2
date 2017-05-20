@@ -271,7 +271,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 addToRequestQueue(
                         request = new JsonObjectRequest(
                                 Request.Method.GET,
-                                "http://nmrapp.hol.es/puntosCercanos.php?lat=" + Double.toString(lat) + "&lon=" + Double.toString(lon),
+                                "http://http://tt.claresti.com/puntosCercanos.php?lat=" + Double.toString(lat) + "&lon=" + Double.toString(lon),
                                 null,
                                 new Response.Listener<JSONObject>(){
                                     @Override
