@@ -190,43 +190,34 @@ public class reporte extends Activity implements OnMapReadyCallback {
     }
 
     private void registrarSuceso(){
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
-                "http://tt.claresti.com/insertar_registro.php",
-                new Response.Listener<String>(){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("latitud", Double.toString(lat));
+        params.put("longitud", Double.toString(lon));
+        params.put("fechaSuceso", fecha.getYear() + "-" + fecha.getMonth()+ "-" + fecha.getDayOfMonth()+ " " + hora.getCurrentHour() + ":" + hora.getCurrentMinute() + ":00");
+        params.put("idTipo", Integer.toString(tipoPos));
+
+
+        TTCustomRequest jsonObjectRequest = new TTCustomRequest(Request.Method.POST, Constantes.INSERTREGISTRO, params,
+                new Response.Listener<JSONObject>()
+                {
                     @Override
-                    public void onResponse(String response){
-                        try{
-                            System.out.println(response + "");
-                            JSONObject respuesta = new JSONObject(response);
-                            procesarRespuesta(respuesta);
-                        }catch(JSONException jsone){
-                            jsone.printStackTrace();
-                        }
+                    public void onResponse(JSONObject response)
+                    {
+                        Log.e("TTREP", "Response: " + response.toString());
+                        procesarRespuesta(response);
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener()
+                {
                     @Override
-                    public void onErrorResponse(VolleyError error){
-                        Log.d("Registrado Fallido", error.toString());
-                        Toast.makeText(getApplicationContext(), "No se pudo hacer el registro", Toast.LENGTH_SHORT).show();
-                        return;
+                    public void onErrorResponse(VolleyError response)
+                    {
+                        Log.e("TTREP", response.toString());
                     }
-                }
-        ){
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("latitud", Double.toString(lat));
-                params.put("longitud", Double.toString(lon));
-                params.put("fechaSuceso", fecha.getYear() + "-" + fecha.getMonth()+ "-" + fecha.getDayOfMonth()+ " " + hora.getCurrentHour() + ":" + hora.getCurrentMinute() + ":00");
-                params.put("idTipo", Integer.toString(tipoPos));
-                return params;
-            }
-        };
-        RequestQueue rq = Volley.newRequestQueue(reporte.this);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        rq.add(stringRequest);
+                });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(0, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
     private void procesarRespuesta(JSONObject respuesta){

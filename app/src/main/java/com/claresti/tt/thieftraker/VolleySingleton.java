@@ -7,19 +7,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Created by Rikym on 05/04/2017.
+ * Created by CLARESTI on 05/04/2017.
  */
 
 public class VolleySingleton {
-
-    //Atributos
     private static VolleySingleton singleton;
     private RequestQueue requestQueue;
     private static Context context;
 
     private VolleySingleton(Context context)
     {
-        VolleySingleton.context = context;
+        this.context = context;
         requestQueue = getRequestQueue();
     }
 
