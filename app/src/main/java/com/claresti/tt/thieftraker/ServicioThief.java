@@ -3,9 +3,11 @@ package com.claresti.tt.thieftraker;
 
 import android.Manifest;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -60,18 +64,46 @@ public class ServicioThief extends Service
 
     public int cantidadIncidentes = 0;
 
-    private TTSingletonUbicacion singletonUbicacion;
+    private LocationManager locationManager;
+    Criteria criteria;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
-        singletonUbicacion = TTSingletonUbicacion.obtenerInstancia();
         isRunning = true;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("MyService", "Received start id " + startId + ": " + intent);
+        locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return START_STICKY;
+        }
+        criteria = new Criteria();
+        locationManager.requestLocationUpdates(5000, 100, criteria, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitud = location.getLatitude();
+                longitud = location.getLongitude();
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        }, null);
         AsyncTask envioUbicacion = new AsyncTask();
         envioUbicacion.execute();
         return START_STICKY;
@@ -143,10 +175,19 @@ public class ServicioThief extends Service
             {
                 while(tiempoTranscurrido < tiempoTotal)
                 {
-                    sendUbicacionaIU(singletonUbicacion.latitud , singletonUbicacion.longitud);
-                    calcularIncidentesCercanos(latitud, longitud);
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return 0;
+                    }
+
+                    Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+                    if(location != null) {
+                        latitud = location.getLatitude();
+                        longitud = location.getLongitude();
+                        sendUbicacionaIU(latitud, longitud);
+                        calcularIncidentesCercanos(latitud, longitud);
+                        Log.e(TAG, "" + tiempoTranscurrido + latitud + longitud);
+                    }
                     Thread.sleep(5000);
-                    Log.e(TAG, "" + tiempoTranscurrido);
                     tiempoTranscurrido += aumentoTiempo;
                 }
                 this.cancel(true);

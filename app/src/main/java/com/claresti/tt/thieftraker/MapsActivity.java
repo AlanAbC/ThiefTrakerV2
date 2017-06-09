@@ -34,13 +34,6 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.ActivityRecognition;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -95,8 +88,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String longi = st.nextToken();
                     lat = Double.parseDouble(lati);
                     lon = Double.parseDouble(longi);
+                    Log.e(LOGTAG, "Actualizando mapa" + lat + lon);
                     if(lat != 0 && lon != 0)
                     {
+
                         actualizarMapa();
                     }
                     break;
@@ -134,8 +129,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        TTSingletonUbicacion.obtenerInstancia(this);
 
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -280,25 +273,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     public void onResponse(JSONObject response){
                                         try{
                                             String estado = response.getString("estado");
+                                            Log.e(LOGTAG, response.toString());
                                             switch (estado){
                                                 case "1":
                                                     JSONArray jArrayMarcadores = response.getJSONArray("registros");
                                                     objetoSucesos[] arrayMarcadores = gson.fromJson(jArrayMarcadores.toString(), objetoSucesos[].class);
-                                                    for(int i = 0; i < arrayMarcadores.length; i++){
+                                                    for(int i = 0; i < arrayMarcadores.length; i++) {
                                                         agregarMarcador(arrayMarcadores[i]);
-                                                    }/*
-                                                    if(flag > 2)
-                                                    {
-                                                        NotificationManager nManager = (NotificationManager) getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
-                                                        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                                                                getBaseContext())
-                                                                .setSmallIcon(R.drawable.ic_notificacion)
-                                                                .setContentTitle("Alerta!")
-                                                                .setContentText("Estas en una zona Peligrosa")
-                                                                .setWhen(System.currentTimeMillis());
-                                                        nManager.notify(12345, builder.build());
-
-                                                    }*/
+                                                    }
                                                     flag = 0;
                                                     break;
                                                 case "0":
